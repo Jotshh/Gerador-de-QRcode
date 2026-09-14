@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de QR Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <div class="page-header">
+    <h1>Gerador de QR Code</h1>
+    <p>Crie QR Codes personalizados para links, textos, e-mails, WhatsApp e redes Wi-Fi  em segundos, direto no navegador.</p>
+  </div>
+
+  <div class="layout">
+
+    <!-- FORM CARD -->
+    <div class="card">
+      <div class="panel-body">
+
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="url">Link / URL</button>
+          <button class="tab-btn" data-tab="text">Texto Livre</button>
+          <button class="tab-btn" data-tab="email">E-mail</button>
+          <button class="tab-btn" data-tab="whatsapp">WhatsApp</button>
+          <button class="tab-btn" data-tab="wifi">Wi-Fi</button>
+        </div>
+
+        <!-- URL -->
+        <div class="tab-content" data-content="url">
+          <div class="field">
+            <label for="url-input">Endereço do link</label>
+            <input type="url" id="url-input" placeholder="https://www.seusite.com.br">
+            <div class="error-msg">Digite um link para gerar o QR Code.</div>
+          </div>
+        </div>
+
+        <!-- TEXT -->
+        <div class="tab-content" data-content="text" style="display:none;">
+          <div class="field">
+            <label for="text-input">Conteúdo do texto</label>
+            <textarea id="text-input" placeholder="Digite qualquer texto livre..."></textarea>
+            <div class="error-msg">Digite um texto para gerar o QR Code.</div>
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="tab-content" data-content="email" style="display:none;">
+          <div class="field">
+            <label for="email-to">E-mail de destino</label>
+            <input type="email" id="email-to" placeholder="contato@empresa.com.br">
+            <div class="error-msg">Digite um e-mail válido.</div>
+          </div>
+          <div class="field">
+            <label for="email-subject">Assunto (opcional)</label>
+            <input type="text" id="email-subject" placeholder="Assunto do e-mail">
+          </div>
+          <div class="field">
+            <label for="email-body">Mensagem (opcional)</label>
+            <textarea id="email-body" placeholder="Escreva a mensagem..."></textarea>
+          </div>
+        </div>
+
+        <!-- WHATSAPP -->
+        <div class="tab-content" data-content="whatsapp" style="display:none;">
+          <div class="field">
+            <label for="wa-number">Número (com DDI e DDD)</label>
+            <input type="tel" id="wa-number" placeholder="5511999999999">
+            <div class="error-msg">Digite um número de WhatsApp válido.</div>
+            <div class="hint">Somente números, ex: 55 (Brasil) + DDD + número.</div>
+          </div>
+          <div class="field">
+            <label for="wa-message">Mensagem (opcional)</label>
+            <textarea id="wa-message" placeholder="Olá! Vim através do QR Code..."></textarea>
+          </div>
+        </div>
+
+        <!-- WIFI -->
+        <div class="tab-content" data-content="wifi" style="display:none;">
+          <div class="field">
+            <label for="wifi-ssid">Nome da rede (SSID)</label>
+            <input type="text" id="wifi-ssid" placeholder="Nome da rede Wi-Fi">
+            <div class="error-msg">Digite o nome da rede.</div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="wifi-security">Segurança</label>
+              <select id="wifi-security">
+                <option value="WPA">WPA / WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Sem senha</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="wifi-password">Senha</label>
+              <input type="password" id="wifi-password" placeholder="Senha da rede">
+            </div>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="wifi-hidden">
+            <label for="wifi-hidden">Rede oculta</label>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <p class="panel-title">Personalização</p>
+
+        <div class="custom-grid">
+          <div class="color-field">
+            <span>Cor do QR Code</span>
+            <input type="color" id="color-fg" value="#151519">
+          </div>
+          <div class="color-field">
+            <span>Cor de fundo</span>
+            <input type="color" id="color-bg" value="#ffffff">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Tamanho</label>
+          <div class="size-options">
+            <button type="button" class="size-btn" data-size="200">200px</button>
+            <button type="button" class="size-btn active" data-size="300">300px</button>
+            <button type="button" class="size-btn" data-size="400">400px</button>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:0;">
+          <label>Logo no centro (opcional)</label>
+          <div class="logo-upload" id="logo-upload">
+            <div class="logo-upload-info">
+              <span id="logo-file-name">Nenhuma imagem selecionada</span>
+              <span class="hint" style="margin-top:2px;">PNG ou JPG, fundo transparente funciona melhor.</span>
+            </div>
+            <div class="logo-upload-actions">
+              <label class="btn-file" for="logo-input">Escolher</label>
+              <button type="button" class="btn-remove" id="logo-remove" style="display:none;">Remover</button>
+            </div>
+          </div>
+          <input type="file" id="logo-input" accept="image/png, image/jpeg, image/svg+xml" hidden>
+        </div>
+
+        <button class="generate-btn" id="generate-btn">Gerar QR Code</button>
+
+      </div>
+    </div>
+
+    <!-- PREVIEW CARD -->
+    <div class="card preview-card">
+      <div class="preview-stage" id="preview-stage">
+        <div id="qrcode-container"></div>
+        <p class="placeholder-text" id="placeholder-text">Preencha os dados ao lado para visualizar seu QR Code aqui.</p>
+      </div>
+
+      <div class="status-badge" id="status-badge" style="display:none;">
+        <span class="dot"></span>
+        QR Code pronto
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary" id="download-btn" disabled>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Baixar PNG
+        </button>
+        <button class="btn-secondary" id="copy-btn" disabled>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copiar imagem
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>
