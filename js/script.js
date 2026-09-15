@@ -3,6 +3,7 @@
   var fgColor = '#151519';
   var bgColor = '#ffffff';
   var size = 300;
+  var quietZone = 8;
   var qr = null;
   var debounceTimer = null;
   var lastContent = '';
@@ -288,9 +289,10 @@
   downloadBtn.addEventListener('click', function(){
     var canvas = getCanvas();
     if(!canvas) return;
+    var exportCanvas = createExportCanvas(canvas);
     var link = document.createElement('a');
     link.download = 'qrcode.png';
-    link.href = canvas.toDataURL('image/png');
+    link.href = exportCanvas.toDataURL('image/png');
     link.click();
     showToast('Download iniciado');
   });
@@ -299,9 +301,10 @@
   copyBtn.addEventListener('click', function(){
     var canvas = getCanvas();
     if(!canvas) return;
+    var exportCanvas = createExportCanvas(canvas);
 
     if(navigator.clipboard && window.ClipboardItem){
-      canvas.toBlob(function(blob){
+      exportCanvas.toBlob(function(blob){
         if(!blob){ fallbackCopyText(); return; }
         navigator.clipboard.write([
           new ClipboardItem({ 'image/png': blob })
@@ -315,6 +318,20 @@
       fallbackCopyText();
     }
   });
+
+  function createExportCanvas(sourceCanvas){
+    var exportCanvas = document.createElement('canvas');
+    var exportSize = sourceCanvas.width + quietZone * 2;
+    var ctx = exportCanvas.getContext('2d');
+
+    exportCanvas.width = exportSize;
+    exportCanvas.height = sourceCanvas.height + quietZone * 2;
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+    ctx.drawImage(sourceCanvas, quietZone, quietZone);
+
+    return exportCanvas;
+  }
 
   function fallbackCopyText(){
     if(!lastContent) return;
