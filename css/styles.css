@@ -24,6 +24,7 @@ body {
     color: var(--ink);
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
 .page {
@@ -37,7 +38,7 @@ body {
 }
 
 .page-header h1 {
-    font-size: 32px;
+    font-size: clamp(26px, 5vw, 32px);
     font-weight: 800;
     letter-spacing: -0.02em;
     margin: 0 0 8px;
@@ -56,6 +57,10 @@ body {
     grid-template-columns: 1.15fr 0.85fr;
     gap: 24px;
     align-items: start;
+}
+
+.layout > .card {
+    min-width: 0;
 }
 
 @media (max-width: 860px) {
@@ -304,6 +309,10 @@ hr.divider {
 }
 
 .logo-upload-info {
+    overflow: hidden;
+}
+
+.logo-upload-info {
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -527,4 +536,33 @@ hr.divider {
     width: 16px;
     height: 16px;
     flex: none;
+}
+
+@media (max-width: 520px) {
+    .page {
+        padding: 28px 16px 48px;
+    }
+
+    .page-header {
+        margin-bottom: 24px;
+    }
+
+    .panel-body,
+    .preview-card {
+        padding: 16px;
+    }
+
+    .tab-btn {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .logo-upload {
+        align-items: flex-start;
+    }
+
+    .logo-upload-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
 }
