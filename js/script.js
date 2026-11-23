@@ -3,8 +3,8 @@
   var fgColor = '#151519';
   var bgColor = '#ffffff';
   var size = 300;
-  var quietZone = 8;
   var qr = null;
+  var qrCanvas = null;
   var debounceTimer = null;
   var lastContent = '';
   var logoImage = null;
@@ -208,6 +208,7 @@
       // legível mesmo com uma logo cobrindo o centro.
       correctLevel: logoImage ? QRCode.CorrectLevel.H : QRCode.CorrectLevel.M
     });
+    qrCanvas = container.querySelector('canvas');
 
     // A lib qrcode.js desenha em um <canvas> mas, em seguida, cria um <img>
     // com o "print" desse canvas e esconde o canvas original. Como a logo é
@@ -226,20 +227,21 @@
       // totalmente desenhado antes de sobrepor a logo.
       setTimeout(function(){
         drawLogoOnCanvas();
-        forceCanvasVisible();
+        renderPreviewCanvas();
       }, 60);
+    } else {
+      renderPreviewCanvas();
     }
   }
 
   function forceCanvasVisible(){
-    var canvas = getCanvas();
     var img = container.querySelector('img');
-    if(canvas) canvas.style.display = 'block';
+    if(qrCanvas) qrCanvas.style.display = 'block';
     if(img) img.style.display = 'none';
   }
 
   function drawLogoOnCanvas(){
-    var canvas = getCanvas();
+    var canvas = qrCanvas;
     if(!canvas || !logoImage) return;
     var ctx = canvas.getContext('2d');
 
@@ -273,6 +275,7 @@
 
   function clearPreview(){
     container.innerHTML = '';
+    qrCanvas = null;
     stage.classList.remove('filled');
     placeholder.style.display = 'block';
     statusBadge.style.display = 'none';
@@ -281,13 +284,9 @@
     lastContent = '';
   }
 
-  function getCanvas(){
-    return container.querySelector('canvas');
-  }
-
   // ---- Download ----
   downloadBtn.addEventListener('click', function(){
-    var canvas = getCanvas();
+    var canvas = qrCanvas;
     if(!canvas) return;
     var exportCanvas = createExportCanvas(canvas);
     var link = document.createElement('a');
@@ -299,7 +298,7 @@
 
   // ---- Copy image (falls back to copying the content text) ----
   copyBtn.addEventListener('click', function(){
-    var canvas = getCanvas();
+    var canvas = qrCanvas;
     if(!canvas) return;
     var exportCanvas = createExportCanvas(canvas);
 
@@ -320,6 +319,8 @@
   });
 
   function createExportCanvas(sourceCanvas){
+    var moduleCount = qr._oQRCode.getModuleCount();
+    var quietZone = Math.ceil(sourceCanvas.width / moduleCount * 4);
     var exportCanvas = document.createElement('canvas');
     var exportSize = sourceCanvas.width + quietZone * 2;
     var ctx = exportCanvas.getContext('2d');
@@ -331,6 +332,11 @@
     ctx.drawImage(sourceCanvas, quietZone, quietZone);
 
     return exportCanvas;
+  }
+
+  function renderPreviewCanvas(){
+    container.innerHTML = '';
+    container.appendChild(createExportCanvas(qrCanvas));
   }
 
   function fallbackCopyText(){
