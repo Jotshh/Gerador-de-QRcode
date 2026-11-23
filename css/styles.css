@@ -419,6 +419,10 @@ hr.divider {
     justify-content: center;
 }
 
+.preview-stage.filled #qrcode-container {
+    width: 100%;
+}
+
 #qrcode-container img,
 #qrcode-container canvas {
     max-width: 100%;
